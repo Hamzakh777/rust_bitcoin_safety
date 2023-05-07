@@ -82,6 +82,7 @@ But we have settled rules that x>=7 and y<=3 ! So, we’ll have
  
 12) Execute ripemd160 
 
+
 13) once found that is equal to the script, stop the script and print the has160, and the key found (print step 9 and step 12)
 
 
