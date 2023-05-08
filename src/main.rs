@@ -36,7 +36,7 @@ fn main() {
     println!("Array A {:?}, x is {}, y is {}", array, x, y);
     println!("Hash to find {}", hash_to_find);
 
-    let mut combinations = array.iter().permutations(length);
+    let mut combinations = array.iter().combinations(length);
     let mut total_hashes: u128 = 0;
     let mut now = Instant::now();
     let one_second = Duration::new(1, 0);
