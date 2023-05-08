@@ -4,10 +4,10 @@ use secp256k1::{PublicKey, Secp256k1, SecretKey};
 use sha256::digest;
 use std::time::{Instant, Duration};
 use std::{io, str::FromStr};
+use rayon::prelude::*;
 
 fn main() {
     let mut array: [usize; 16] = [0; 16];
-    let length = 13;
 
     println!("Array start number");
     let array_start = read_to_number();
@@ -17,6 +17,12 @@ fn main() {
 
     println!("Please input y");
     let y = read_to_number();
+
+    println!("Please input the length");
+    let length = read_to_number();
+    
+    println!("Please input the last number bits length");
+    let last_number_bits_length = read_to_number();
 
     println!("Please input the hash to find");
     let hash_to_find = read_to_string();
@@ -38,7 +44,7 @@ fn main() {
     while let Some(combination) = combinations.next() {
         total_hashes += 1;
         if *combination[0] >= x && *combination[combination.len() - 1] <= y {
-            verify(&combination, &hash_to_find);
+            verify(&combination, &hash_to_find, &last_number_bits_length);
         }
         if now.elapsed() >= one_second {
             println!("Hashes per second: {} hash/s", total_hashes);
@@ -70,7 +76,7 @@ fn read_to_string() -> String {
     res
 }
 
-fn verify(combination: &Vec<&usize>, hash: &str) -> bool {
+fn verify(combination: &Vec<&usize>, hash: &str, last_number_bits_length: &usize) -> bool {
     let mut combination_in_bits: Vec<String> = vec![];
     for (i, value) in combination.iter().enumerate() {
         let bits = format!("{:b}", **value);
@@ -78,11 +84,21 @@ fn verify(combination: &Vec<&usize>, hash: &str) -> bool {
             let (_, second_slice) = bits.split_at(bits.len() - 4);
             combination_in_bits.push(second_slice.to_string());
         } else if combination.len() - 1 == i {
-            combination_in_bits.push(bits.to_string());
+            if last_number_bits_length == &2 {
+                combination_in_bits.push(format!("{:0>2}", bits.to_string()));
+            } else if last_number_bits_length == &3 {
+                combination_in_bits.push(format!("{:0>3}", bits.to_string()));
+            } else if last_number_bits_length == &4 {
+                combination_in_bits.push(format!("{:0>4}", bits.to_string()));
+            } else {
+                combination_in_bits.push(bits.to_string());
+            }
         } else {
             combination_in_bits.push(format!("{:0>4}", bits.to_string()));
         }
     }
+
+    println!("{:?}", combination_in_bits);
 
     let binary = combination_in_bits.join("");
     let hex = convert_binary_to_hex(&binary);
@@ -136,12 +152,17 @@ fn sha256_to_ripemd(sha256: &str) -> String {
 mod tests {
     use super::*;
 
+    #[test] 
+    fn test_something() {
+        println!("{:0>2}", "02233");
+    }
+
     #[test]
     fn test_verify() {
         let array = vec![&7, &0, &1, &2, &3, &4, &5, &6, &7, &8, &1, &1, &3];
         let hash_to_find = "24eb23f3cf0e14458f07ef0ce9d1e09c5e25e00d";
 
-        assert!(verify(&array, &hash_to_find));
+        assert!(verify(&array, &hash_to_find, &2));
     }
 
     #[test]
