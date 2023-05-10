@@ -86,20 +86,5 @@ But we have settled rules that x>=7 and y<=3 ! So, we’ll have
 13) once found that is equal to the script, stop the script and print the has160, and the key found (print step 9 and step 12)
 
 
-## Flow
-1. We can give the script just the start number for array A and we'll automatically generate the rest
-   1. give it like start = 4
-   2. the script will automatically 4 till 20 
-2. When we start the script we should give it X.
-3. Set an hash160 to be compared: 24eb23f3cf0e14458f07ef0ce9d1e09c5e25e00d 
-4. X is the array's length 
-5. x is the first number in the array
-6. y is the last number
-7. give the script how many bits to take of the last number
-8. limit the numbers in Array A to max 4 bits
-9. do some benchmarks -> how many combinations we can calculate per second
-
-when we generate every pertumutation with repetition, we should keep in mind that it must have every single number from the permutation without repetition 
-
 ## In short
 Given a hash160 and a list of number, find the numbers permutations with repetitions that will result in the given hash160

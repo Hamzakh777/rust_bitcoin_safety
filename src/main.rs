@@ -4,7 +4,6 @@ use secp256k1::{PublicKey, Secp256k1, SecretKey};
 use sha256::digest;
 use std::time::{Instant, Duration};
 use std::{io, str::FromStr};
-use rayon::prelude::*;
 
 fn main() {
     let mut array: [usize; 16] = [0; 16];
